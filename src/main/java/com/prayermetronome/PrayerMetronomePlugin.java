@@ -3,6 +3,7 @@ package com.prayermetronome;
 import com.google.inject.Provides;
 import javax.inject.Inject;
 import net.runelite.api.Client;
+import net.runelite.api.Preferences;
 import net.runelite.api.Prayer;
 import net.runelite.api.SoundEffectID;
 import net.runelite.api.events.GameTick;
@@ -83,7 +84,14 @@ public class PrayerMetronomePlugin extends Plugin
 
 		if (tickSound != null)
 		{
+			Preferences preferences = client.getPreferences();
+			int previousVolume = preferences.getSoundEffectVolume();
+
+			preferences.setSoundEffectVolume(config.volume());
+
 			client.playSoundEffect(tickSound, config.volume());
+
+			preferences.setSoundEffectVolume(previousVolume);
 		}
 	}
 }
