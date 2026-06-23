@@ -14,26 +14,27 @@ public interface PrayerMetronomeConfig extends Config
 	int VOLUME_MAX = SoundEffectVolume.HIGH;
 
 	@ConfigItem(
-		keyName = "volume",
-		name = "Volume",
-		description = "Configures the volume of the tick sound. A value of 0 will disable tick sounds.",
+		keyName = "prayerVolume",
+		name = "Prayer tick volume",
+		description = "Volume of the tick sound when a protection prayer is active.",
 		position = 1
 	)
 	@Range(max = VOLUME_MAX)
-	default int volume()
+	default int prayerVolume()
 	{
-		return SoundEffectVolume.MEDIUM_HIGH;
+		return SoundEffectVolume.MEDIUM_LOW;
 	}
 
 	@ConfigItem(
-		keyName = "soundOnNoPrayer",
-		name = "Play sound on no prayer",
-		description = "Play a sound on ticks when no protection prayer is active",
+		keyName = "noPrayerVolume",
+		name = "No prayer tick volume",
+		description = "Volume of the tick sound when no protection prayer is active. A value of 0 will disable tick sounds without an active prayer.",
 		position = 2
 	)
-	default boolean soundOnNoPrayer()
+	@Range(max = VOLUME_MAX)
+	default int noPrayerVolume()
 	{
-		return true;
+		return SoundEffectVolume.MEDIUM_HIGH;
 	}
 
 	@ConfigItem(

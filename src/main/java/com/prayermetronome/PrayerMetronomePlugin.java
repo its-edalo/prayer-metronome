@@ -65,31 +65,36 @@ public class PrayerMetronomePlugin extends Plugin
 			return 4198; // giant_basilisk_stomp
 		}
 
-		if (config.soundOnNoPrayer()) {
-			return defaultTickSound;
+		return defaultTickSound;
+	}
+
+	private int getTickVolume()
+	{
+		if (client.isPrayerActive(Prayer.PROTECT_FROM_MAGIC)
+			|| client.isPrayerActive(Prayer.PROTECT_FROM_MISSILES)
+			|| client.isPrayerActive(Prayer.PROTECT_FROM_MELEE))
+		{
+			return config.prayerVolume();
 		}
 
-		return null;
+		return config.noPrayerVolume();
 	}
 
 	@Subscribe
 	public void onGameTick(GameTick event)
 	{
-		if (config.volume() == 0)
-		{
-			return;
-		}
+		int tickVolume = getTickVolume();
 
-		Integer tickSound = getTickSound();
-
-		if (tickSound != null)
+		if (tickVolume > 0)
 		{
+			Integer tickSound = getTickSound();
+
 			Preferences preferences = client.getPreferences();
 			int previousVolume = preferences.getSoundEffectVolume();
 
-			preferences.setSoundEffectVolume(config.volume());
+			preferences.setSoundEffectVolume(tickVolume);
 
-			client.playSoundEffect(tickSound, config.volume());
+			client.playSoundEffect(tickSound, tickVolume);
 
 			preferences.setSoundEffectVolume(previousVolume);
 		}
